@@ -1,4 +1,5 @@
 # Proof of concept file reading regex from one file and testing against another txt file
+# Input file consists of python regex each on a separate line
 
 import re
 
