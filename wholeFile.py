@@ -11,8 +11,10 @@ reFile = open('lib/phi_regex.txt', 'r')
 #fileToScanName = input("Please enter the name of the file you wish to scan:")
 fileToScanName = 'test_text.txt'
 for line in reFile:
+
     fileToScan = open(fileToScanName, 'r')
-    #stip the newline from the regex
+
+    # strip the newline from the regex
     line = line.rstrip('\n')
     print(line)
     exp = re.compile(line)
