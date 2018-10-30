@@ -1,0 +1,13 @@
+anxiety
+arthritis
+asthma
+cardiovascular
+diabetes
+gastrointestinal
+hyperlipidemia
+hypertension
+hypothyroidism
+intramuscular
+obesity
+osteoarthritis
+reflux
