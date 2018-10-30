@@ -8,8 +8,10 @@ reFile = open(reFileName, 'r')
 fileToScanName = input("Please enter the name of the file you wish to scan:")
 fileToScan = open(fileToScanName, 'r')
 for line in reFile:
+    line = line.rstrip("\n")
     print(line)
     exp = re.compile(line)
+    print(exp)
     for scanLine in fileToScan:
         print(scanLine)
         match = exp.match(scanLine)

@@ -5,12 +5,18 @@
 
 import re
 
-reFileName = input("Please enter the name of the file containing regular expressions:")
-reFile = open(reFileName, 'r')
-fileToScanName = input("Please enter the name of the file you wish to scan:")
-fileToScan = open(fileToScanName, 'r')
+#reFileName = input("Please enter the name of the file containing regular expressions:")
+#reFile = open(reFileName, 'r')
+reFile = open('lib/phi_regex.txt', 'r')
+#fileToScanName = input("Please enter the name of the file you wish to scan:")
+fileToScanName = 'test_text.txt'
 for line in reFile:
+    fileToScan = open(fileToScanName, 'r')
+    #stip the newline from the regex
+    line = line.rstrip('\n')
     print(line)
     exp = re.compile(line)
+    print(exp)
     match = exp.findall(fileToScan.read())
     print(match)
+    fileToScan.close()
