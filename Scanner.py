@@ -43,31 +43,22 @@ def main():
     
     # Scan for PHI Indicators
     scanner_phi.get_regex()
-    print(scanner_phi.regex)
-
     scanner_phi.find_matches()
     print(scanner_phi.matches)
-
     if len(scanner_phi.matches) > 10:
         scanner_phi.flag_file()
         
     # Scan for popular drugs
     scanner_drugs.get_regex()
-    print(scanner_drugs.regex)
-
     scanner_drugs.find_matches()
     print(scanner_drugs.matches)
-
     if len(scanner_drugs.matches) > 10:
         scanner_drugs.flag_file()
     
     # Scan for popular medical terms
     scanner_medterms.get_regex()
-    print(scanner_medterms.regex)
-
     scanner_medterms.find_matches()
     print(scanner_medterms.matches)
-
     if len(scanner_medterms.matches) > 10:
         scanner_medterms.flag_file()
 
