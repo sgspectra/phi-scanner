@@ -37,15 +37,39 @@ class Scanner:
 
 
 def main():
-    scanner = Scanner('lib/phi_regex.txt', 'test_text.txt')
-    scanner.get_regex()
-    print(scanner.regex)
+    scanner_phi = Scanner('lib/phi_regex.txt', 'test_text.txt')
+    scanner_drugs = Scanner('lib/drugs.txt', 'test_text.txt')
+    scanner_medterms = Scanner('lib/medTerms.txt', 'test_text.txt')
+    
+    # Scan for PHI Indicators
+    scanner_phi.get_regex()
+    print(scanner_phi.regex)
 
-    scanner.find_matches()
-    print(scanner.matches)
+    scanner_phi.find_matches()
+    print(scanner_phi.matches)
 
-    if len(scanner.matches) > 10:
-        scanner.flag_file()
+    if len(scanner_phi.matches) > 10:
+        scanner_phi.flag_file()
+        
+    # Scan for popular drugs
+    scanner_drugs.get_regex()
+    print(scanner_drugs.regex)
+
+    scanner_drugs.find_matches()
+    print(scanner_drugs.matches)
+
+    if len(scanner_drugs.matches) > 10:
+        scanner_drugs.flag_file()
+    
+    # Scan for popular medical terms
+    scanner_medterms.get_regex()
+    print(scanner_medterms.regex)
+
+    scanner_medterms.find_matches()
+    print(scanner_medterms.matches)
+
+    if len(scanner_medterms.matches) > 10:
+        scanner_medterms.flag_file()
 
 
 if __name__ == "__main__":
