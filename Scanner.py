@@ -40,6 +40,9 @@ def main():
     scanner_phi = Scanner('lib/phi_regex.txt', 'test_text.txt')
     scanner_drugs = Scanner('lib/drugs.txt', 'test_text.txt')
     scanner_medterms = Scanner('lib/medTerms.txt', 'test_text.txt')
+
+    # TODO If we move the scan for drugs and med terms to be the first scans, the scan
+    # TODO for PHI indicators will become irrelevant
     
     # Scan for PHI Indicators
     scanner_phi.get_regex()
