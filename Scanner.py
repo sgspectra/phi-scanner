@@ -35,6 +35,10 @@ class Scanner:
     def flag_file(self):
         print("flag " + self.scanFile)
 
+    def match_count(self):
+        return len(self.matches)
+
+
 
 def main():
     scanner_phi = Scanner('lib/phi_regex.txt', 'test_text.txt')
