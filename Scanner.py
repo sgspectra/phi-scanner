@@ -47,14 +47,7 @@ def main():
 
     # TODO If we move the scan for drugs and med terms to be the first scans, the scan
     # TODO for PHI indicators will become irrelevant
-    
-    # Scan for PHI Indicators
-    scanner_phi.get_regex()
-    scanner_phi.find_matches()
-    print(scanner_phi.matches)
-    if len(scanner_phi.matches) > 10:
-        scanner_phi.flag_file()
-        
+
     # Scan for popular drugs
     scanner_drugs.get_regex()
     scanner_drugs.find_matches()
@@ -68,6 +61,14 @@ def main():
     print(scanner_medterms.matches)
     if len(scanner_medterms.matches) > 10:
         scanner_medterms.flag_file()
+
+    if scanner_drugs.match_count() > 0 or scanner_medterms.match_count() > 0:
+        # Scan for PHI Indicators
+        scanner_phi.get_regex()
+        scanner_phi.find_matches()
+        print(scanner_phi.matches)
+        if len(scanner_phi.matches) > 10:
+            scanner_phi.flag_file()
 
 
 if __name__ == "__main__":
