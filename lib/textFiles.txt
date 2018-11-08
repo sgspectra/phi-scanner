@@ -1,0 +1,4 @@
+./sampleDir/subdir1/file4.txt
+./sampleDir/file1.txt
+./sampleDir/file3.pdf
+./sampleDir/file2.csv
