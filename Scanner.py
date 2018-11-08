@@ -1,4 +1,5 @@
 import re
+import os
 
 
 class Scanner:
@@ -39,6 +40,29 @@ class Scanner:
         return len(self.matches)
 
 
+class FileFinder:
+
+    def __init__(self, directory, extension):
+        self.dir = directory
+        self.ext = extension
+        self.output = "./default_output.txt"
+
+
+    def setoutput(self):
+         print("Please enter the output location:")
+         self.output = input()
+
+
+    def findfiles(self, direct):
+        output = open(self.output, 'a+')
+        for entry in os.scandir(direct):
+            if entry.is_dir(follow_symlinks=False):
+                self.findfiles(entry.path)
+            elif entry.path.endswith(self.ext):
+                output.write(entry.path)
+                output.write('\n')
+        output.close()
+
 
 def main():
     scanner_phi = Scanner('lib/phi_regex.txt', 'test_text.txt')
@@ -69,6 +93,10 @@ def main():
         print(scanner_phi.matches)
         if len(scanner_phi.matches) > 10:
             scanner_phi.flag_file()
+
+    f = FileFinder('./sampleDir', '.txt')
+    f.setoutput()
+    f.findfiles(f.dir)
 
 
 if __name__ == "__main__":
