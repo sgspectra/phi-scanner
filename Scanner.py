@@ -47,11 +47,9 @@ class FileFinder:
         self.ext = extension
         self.output = "./default_output.txt"
 
-
     def setoutput(self):
          print("Please enter the output location:")
          self.output = input()
-
 
     def findfiles(self, direct):
         output = open(self.output, 'a+')
