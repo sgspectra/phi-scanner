@@ -69,9 +69,6 @@ def main():
     scanner_drugs = Scanner('lib/drugs.txt', 'test_text.txt')
     scanner_medterms = Scanner('lib/medTerms.txt', 'test_text.txt')
 
-    # TODO If we move the scan for drugs and med terms to be the first scans, the scan
-    # TODO for PHI indicators will become irrelevant
-
     # Scan for popular drugs
     scanner_drugs.get_regex()
     scanner_drugs.find_matches()
