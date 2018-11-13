@@ -63,32 +63,6 @@ class FileFinder:
 
 
 def main():
-    scanner_phi = Scanner('lib/phi_regex.txt', 'test_text.txt')
-    scanner_drugs = Scanner('lib/drugs.txt', 'test_text.txt')
-    scanner_medterms = Scanner('lib/medTerms.txt', 'test_text.txt')
-
-    # Scan for popular drugs
-    scanner_drugs.get_regex()
-    scanner_drugs.find_matches()
-    print(scanner_drugs.matches)
-    if len(scanner_drugs.matches) > 10:
-        scanner_drugs.flag_file()
-    
-    # Scan for popular medical terms
-    scanner_medterms.get_regex()
-    scanner_medterms.find_matches()
-    print(scanner_medterms.matches)
-    if len(scanner_medterms.matches) > 10:
-        scanner_medterms.flag_file()
-
-    if scanner_drugs.match_count() > 0 or scanner_medterms.match_count() > 0:
-        # Scan for PHI Indicators
-        scanner_phi.get_regex()
-        scanner_phi.find_matches()
-        print(scanner_phi.matches)
-        if len(scanner_phi.matches) > 10:
-            scanner_phi.flag_file()
-
     #create a file finder to find text docs
     f = FileFinder('./sampleDir', '.txt')
     #set the output of the file finder
@@ -100,12 +74,25 @@ def main():
     txtdocs = open(f.output, 'r')
     #each file in the output file will be a path to a text doc that needs to be scanned
     for line in txtdocs:
+        #strip newline
         line = line.rstrip('\n')
-        scan = Scanner('./lib/phi_regex.txt', line)
-        scan.get_regex()
-        scan.find_matches()
+        #scan for phi
+        scan1 = Scanner('./lib/phi_regex.txt', line)
+        scan1.get_regex()
+        scan1.find_matches()
         print(line)
-        print(scan.matches)
+        print(scan1.matches)
+        #scan for medTerms
+        scan2 = Scanner('./lib/medTerms.txt', line)
+        scan2.get_regex()
+        scan2.find_matches()
+        print(scan2.matches)
+        #scan for drugs
+        scan3 = Scanner('./lib/drugs.txt', line)
+        scan3.get_regex()
+        scan3.find_matches()
+        print(scan3.matches)
+
 
 
 if __name__ == "__main__":
