@@ -89,9 +89,23 @@ def main():
         if len(scanner_phi.matches) > 10:
             scanner_phi.flag_file()
 
+    #create a file finder to find text docs
     f = FileFinder('./sampleDir', '.txt')
+    #set the output of the file finder
     f.setoutput()
+    #scan for files
     f.findfiles(f.dir)
+
+    #open the output file
+    txtdocs = open(f.output, 'r')
+    #each file in the output file will be a path to a text doc that needs to be scanned
+    for line in txtdocs:
+        line = line.rstrip('\n')
+        scan = Scanner('./lib/phi_regex.txt', line)
+        scan.get_regex()
+        scan.find_matches()
+        print(line)
+        print(scan.matches)
 
 
 if __name__ == "__main__":
