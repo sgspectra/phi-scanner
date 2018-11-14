@@ -2,7 +2,7 @@ import re
 import os
 
 
-class Scanner:
+class TextScanner:
 
     def __init__(self, regexFile, scanFile):
         self.regexFile = regexFile
@@ -77,18 +77,18 @@ def main():
         #strip newline
         line = line.rstrip('\n')
         #scan for phi
-        scan1 = Scanner('./lib/phi_regex.txt', line)
+        scan1 = TextScanner('./lib/phi_regex.txt', line)
         scan1.get_regex()
         scan1.find_matches()
         print(line)
         print(scan1.matches)
         #scan for medTerms
-        scan2 = Scanner('./lib/medTerms.txt', line)
+        scan2 = TextScanner('./lib/medTerms.txt', line)
         scan2.get_regex()
         scan2.find_matches()
         print(scan2.matches)
         #scan for drugs
-        scan3 = Scanner('./lib/drugs.txt', line)
+        scan3 = TextScanner('./lib/drugs.txt', line)
         scan3.get_regex()
         scan3.find_matches()
         print(scan3.matches)
