@@ -63,36 +63,35 @@ class FileFinder:
 
 
 def main():
-    #create a file finder to find text docs
+    # create a file finder to find text docs
     f = FileFinder('./sampleDir', '.txt')
-    #set the output of the file finder
+    # set the output of the file finder
     f.setoutput()
-    #scan for files
+    # scan for files
     f.findfiles(f.dir)
 
-    #open the output file
+    # open the output file
     txtdocs = open(f.output, 'r')
-    #each file in the output file will be a path to a text doc that needs to be scanned
+    # each file in the output file will be a path to a text doc that needs to be scanned
     for line in txtdocs:
-        #strip newline
+        # strip newline
         line = line.rstrip('\n')
-        #scan for phi
+        # scan for phi
         scan1 = TextScanner('./lib/phi_regex.txt', line)
         scan1.get_regex()
         scan1.find_matches()
         print(line)
         print(scan1.matches)
-        #scan for medTerms
+        # scan for medTerms
         scan2 = TextScanner('./lib/medTerms.txt', line)
         scan2.get_regex()
         scan2.find_matches()
         print(scan2.matches)
-        #scan for drugs
+        # scan for drugs
         scan3 = TextScanner('./lib/drugs.txt', line)
         scan3.get_regex()
         scan3.find_matches()
         print(scan3.matches)
-
 
 
 if __name__ == "__main__":
