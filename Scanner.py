@@ -1,6 +1,7 @@
 import re
 import os
-
+import xml.etree.ElementTree as ElementTree
+import zipfile
 
 class TextScanner:
 
@@ -11,27 +12,28 @@ class TextScanner:
         self.matches = []
 
     def get_regex(self):
-        with open(self.regexFile, 'r') as file:
-            for line in file:
+        with open(self.regexFile, 'r') as inFile:
+            for line in inFile:
 
                 line = line.rstrip('\n')
 
                 if len(line) > 0:
                     regex = re.compile(line)
                     self.regex.append(regex)
+        inFile.close()
 
     def find_matches(self):
         for exp in self.regex:
 
-            with open(self.scanFile, 'r') as file:
+            with open(self.scanFile, 'r') as inFile:
 
-                for line in file:
+                for line in inFile:
                     matches = exp.findall(line)
 
                     for match in matches:
                         self.matches.append(match)
 
-            file.close()
+            inFile.close()
 
     def flag_file(self):
         print("flag " + self.scanFile)
@@ -40,12 +42,59 @@ class TextScanner:
         return len(self.matches)
 
 
+class ZipScanner:
+
+    def __init__(self, regexFile, scanFile):
+        self.regexFile = regexFile
+        self.scanFile = scanFile
+        self.regex = []
+        self.matches = []
+
+    def get_regex(self):
+        with open(self.regexFile, 'r') as inFile:
+            for line in inFile:
+
+                line = line.rstrip('\n')
+
+                if len(line) > 0:
+                    regex = re.compile(line)
+                    self.regex.append(regex)
+        inFile.close()
+
+    def find_matches(self):
+
+        inputZipFile = zipfile.ZipFile(self.scanFile)
+        for name in inputZipFile.namelist():
+            if name.endswith(".xml"):
+                for exp in self.regex:
+
+                    inFile =  str(inputZipFile.read(name))
+                    matches = exp.findall(inFile)
+
+                    for match in matches:
+                        self.matches.append(match)
+
+
+
 class FileFinder:
 
-    def __init__(self, directory, extension):
+    def __init__(self, directory, extension = ".txt"):
         self.dir = directory
         self.ext = extension
         self.output = "./default_output.txt"
+        self.foundfiles = []
+
+    def changeFiletype(self, ext):
+        self.foundfiles = []
+        self.ext = ext
+
+    def returnfiles(self, direct):
+        for entry in os.scandir(direct):
+            if entry.is_dir(follow_symlinks=False):
+                self.findfiles(entry.path)
+            elif entry.path.endswith(self.ext):
+                self.foundfiles.append(entry.path)
+        return self.foundfiles
 
     def setoutput(self):
          print("Please enter the output location:")
@@ -62,36 +111,36 @@ class FileFinder:
         output.close()
 
 
-def main():
-    # create a file finder to find text docs
-    f = FileFinder('./sampleDir', '.txt')
-    # set the output of the file finder
-    f.setoutput()
-    # scan for files
-    f.findfiles(f.dir)
+def createScanner(regex, fileName, fileType):
+    if fileType in ['.docx','.pptx','.zip']:
+        return ZipScanner(regex, fileName)
+    else:
+        return TextScanner(regex, fileName)
 
-    # open the output file
-    txtdocs = open(f.output, 'r')
-    # each file in the output file will be a path to a text doc that needs to be scanned
-    for line in txtdocs:
-        # strip newline
-        line = line.rstrip('\n')
-        # scan for medTerms
-        scan2 = TextScanner('./lib/medTerms.txt', line)
-        scan2.get_regex()
-        scan2.find_matches()
-        print(line)
-        print(scan2.matches)
-        # scan for drugs
-        scan3 = TextScanner('./lib/drugs.txt', line)
-        scan3.get_regex()
-        scan3.find_matches()
-        print(scan3.matches)
-        # scan for phi
-        scan1 = TextScanner('./lib/phi_regex.txt', line)
-        scan1.get_regex()
-        scan1.find_matches()
-        print(scan1.matches)
+def main():
+    typelist = ['.txt','.docx','.pptx','.zip']
+    regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
+
+    # create a file finder to find text docs
+    f = FileFinder('./sampleDir')
+
+    for filetype in typelist:
+
+        f.changeFiletype(filetype)
+
+        # scan for files
+        foundfiles = f.returnfiles(f.dir)
+
+        # each file in the output file will be a path to a text doc that needs to be scanned
+        for line in foundfiles:
+            # strip newline
+            line = line.rstrip('\n')
+            # scan for terms of each regex file
+            for regexList in regexFiles:
+                scan = createScanner(regexList, line, filetype)
+                scan.get_regex()
+                scan.find_matches()
+                print(scan.matches)
 
 
 if __name__ == "__main__":
