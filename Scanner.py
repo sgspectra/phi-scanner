@@ -120,6 +120,7 @@ def createScanner(regex, fileName, fileType):
 def main():
     typelist = ['.txt','.docx','.pptx','.zip']
     regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
+    matches = {}
 
     # create a file finder to find text docs
     f = FileFinder('./sampleDir')
@@ -140,7 +141,13 @@ def main():
                 scan = createScanner(regexList, line, filetype)
                 scan.get_regex()
                 scan.find_matches()
+                if line in matches.keys():
+                    matches[line] += scan.matches
+                else:
+                    matches[line] = scan.matches
                 print(scan.matches)
+    
+    return matches
 
 
 if __name__ == "__main__":
