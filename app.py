@@ -6,5 +6,5 @@ app= Flask(__name__)
 
 @app.route("/")
 def hello():
-    scannerValues = Scanner.main()
+    scannerValues = Scanner.runFullScan()
     return render_template('index.html', foundfiles = scannerValues)

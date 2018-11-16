@@ -91,15 +91,20 @@ class FileFinder:
     def returnfiles(self, direct):
         for entry in os.scandir(direct):
             if entry.is_dir(follow_symlinks=False):
-                self.findfiles(entry.path)
+                self.returnfiles(entry.path)
             elif entry.path.endswith(self.ext):
                 self.foundfiles.append(entry.path)
+                o = open(self.output, 'a+')
+                o.write(entry.path)
+                o.write('\n')
+                o.close()
         return self.foundfiles
 
     def setoutput(self):
          print("Please enter the output location:")
          self.output = input()
 
+"""
     def findfiles(self, direct):
         output = open(self.output, 'a+')
         for entry in os.scandir(direct):
@@ -109,7 +114,7 @@ class FileFinder:
                 output.write(entry.path)
                 output.write('\n')
         output.close()
-
+"""
 
 def createScanner(regex, fileName, fileType):
     if fileType in ['.docx','.pptx','.zip']:
@@ -117,8 +122,8 @@ def createScanner(regex, fileName, fileType):
     else:
         return TextScanner(regex, fileName)
 
-def main():
-    typelist = ['.txt','.docx','.pptx','.zip']
+def runFullScan():
+    typelist = ['.txt', '.docx', '.pptx', '.zip']
     regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
     matches = {}
 
@@ -131,6 +136,7 @@ def main():
 
         # scan for files
         foundfiles = f.returnfiles(f.dir)
+        print(foundfiles)
 
         # each file in the output file will be a path to a text doc that needs to be scanned
         for line in foundfiles:
@@ -148,6 +154,80 @@ def main():
                 print(scan.matches)
     
     return matches
+
+def editPhiTerms():
+    option = 0
+    while(option != 3):
+        print("1. View PHI Regular Expression File")
+        print("2. Add to PHI Regular Expression File")
+        print("3. Return to Main Menu")
+        option = int(input('$'))
+        if(option == 1):
+            f = open('./lib/phi_regex.txt', 'r')
+            for line in f:
+                print(line.rstrip('\n'))
+            f.close()
+        elif(option == 2):
+            f = open('./lib/phi_regex.txt', 'a+')
+            newRegex = input("Please enter the regular expression to be added:")
+            f.write('\n')
+            f.write(newRegex)
+            f.close()
+
+def editDictionary():
+    option = 0
+    while(option != 5):
+        print("1. View Dictionary of Drug Terms")
+        print("2. Edit Dictionary of Drug Terms")
+        print("3. View Dictionary of Medical Terms")
+        print("4. Edit Dictionary of Medical Terms")
+        print("5. Return to Main Menu")
+        option = int(input('$'))
+        if (option == 1):
+            f = open('./lib/drugs.txt', 'r')
+            for line in f:
+                print(line.rstrip('\n'))
+            f.close()
+        elif (option == 2):
+            f = open('./lib/drugs.txt', 'a+')
+            newRegex = input("Please enter the term to be added:")
+            f.write('\n')
+            f.write(newRegex)
+            f.close()
+        elif (option == 3):
+            f = open('./lib/medTerms.txt', 'r')
+            for line in f:
+                print(line.rstrip('\n'))
+            f.close()
+        elif (option == 4):
+            f = open('./lib/medTerms', 'a+')
+            newRegex = input("Please enter the term to be added:")
+            f.write('\n')
+            f.write(newRegex)
+            f.close()
+
+def menu():
+    userEntry = 0
+    print("******* Welcome to PHI Scanner *******")
+    while(userEntry != 4):
+        print("Please make you selection from the following options:")
+        print("1. Scan for file which may contain PHI indicators")
+        print("2. Edit PHI Search Terms")
+        print("3. Edit Dictionary")
+        print("4. Exit")
+        #TODO make sure userEntry is valid
+        userEntry = int(input('$'))
+        if(userEntry == 1):
+            runFullScan()
+        elif(userEntry == 2):
+            editPhiTerms()
+        elif(userEntry == 3):
+            editDictionary()
+        print('******* ******* ******* *******')
+
+
+def main():
+    menu()
 
 
 if __name__ == "__main__":
