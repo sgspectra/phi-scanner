@@ -23,3 +23,11 @@
 ./sampleDir/subdir1/file4.txt
 ./sampleDir/subdir1/file4.txt
 ./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt
+./sampleDir/subdir1/file4.txt

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}PHI Scanner{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <table>
+  {% for file in foundfiles %}
+    <tr>{{file}}</tr>
+  {% endfor %}
+  </table>
+{% endblock %}
