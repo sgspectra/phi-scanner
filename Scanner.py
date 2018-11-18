@@ -28,16 +28,11 @@ class TextScanner:
 
     def find_matches(self):
         for exp in self.regex:
-
             with open(self.scanFile, 'r') as inFile:
-
                 for line in inFile:
-
                     matches = exp.findall(line)
-
                     for match in matches:
                         self.matches.append(match)
-
             inFile.close()
 
     def flag_file(self):
@@ -76,22 +71,10 @@ class ZipScanner:
                 #split the file to get only the files text
                 splitFile = re.split(re.compile("</?w\:t[\S?.*?]?>"), inFile)
                 inFile = '\n'.join(splitFile[1::2])
-                for exp in self.regex:
-
-                    
+                for exp in self.regex:                    
                     matches = exp.findall(inFile)
-
-                    #TODO Remove code for debugging false positives
-                    # dump = open('./dump.txt', 'a+')
-                    # dump.write(name)
-                    # dump.write('\n')
-                    # dump.write(str(matches))
-                    # dump.write('\n')
-                    # dump.close()
-
                     for match in matches:
                         self.matches.append(match)
-
 
 
 class FileFinder:
@@ -122,17 +105,6 @@ class FileFinder:
          print("Please enter the output location:")
          self.output = input()
 
-"""
-    def findfiles(self, direct):
-        output = open(self.output, 'a+')
-        for entry in os.scandir(direct):
-            if entry.is_dir(follow_symlinks=False):
-                self.findfiles(entry.path)
-            elif entry.path.endswith(self.ext):
-                output.write(entry.path)
-                output.write('\n')
-        output.close()
-"""
 
 def createScanner(regex, fileName, fileType):
     if fileType in ['.docx','.pptx','.zip']:
