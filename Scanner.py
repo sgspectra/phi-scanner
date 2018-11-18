@@ -76,7 +76,6 @@ class ZipScanner:
                 #split the file to get only the files text
                 splitFile = re.split(re.compile("</?w\:t[\S?.*?]?>"), inFile)
                 inFile = '\n'.join(splitFile[1::2])
-                print(inFile)
                 for exp in self.regex:
 
                     
