@@ -4,7 +4,7 @@ import re
 import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
-import pyAesCrypt
+#import pyAesCrypt
 
 
 class TextScanner:
@@ -70,10 +70,16 @@ class ZipScanner:
 
         inputZipFile = zipfile.ZipFile(self.scanFile)
         for name in inputZipFile.namelist():
-            if name.endswith("document.xml"):
+            if name.endswith(".xml"):
+                inFile =  str(inputZipFile.read(name))
+
+                #split the file to get only the files text
+                splitFile = re.split(re.compile("</?w\:t[\S?.*?]?>"), inFile)
+                inFile = '\n'.join(splitFile[1::2])
+                print(inFile)
                 for exp in self.regex:
 
-                    inFile =  str(inputZipFile.read(name))
+                    
                     matches = exp.findall(inFile)
 
                     #TODO Remove code for debugging false positives
