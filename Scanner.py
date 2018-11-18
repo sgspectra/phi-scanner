@@ -69,7 +69,7 @@ class ZipScanner:
                 inFile =  str(inputZipFile.read(name))
 
                 #split the file to get only the files text
-                splitFile = re.split(re.compile("</?w\:t[\S?.*?]?>"), inFile)
+                splitFile = re.split(re.compile("</?[A-Za-z]\:t[\S?.*?]?>"), inFile)
                 inFile = '\n'.join(splitFile[1::2])
                 for exp in self.regex:                    
                     matches = exp.findall(inFile)
