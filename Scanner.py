@@ -91,15 +91,20 @@ class FileFinder:
     def returnfiles(self, direct):
         for entry in os.scandir(direct):
             if entry.is_dir(follow_symlinks=False):
-                self.findfiles(entry.path)
+                self.returnfiles(entry.path)
             elif entry.path.endswith(self.ext):
                 self.foundfiles.append(entry.path)
+                o = open(self.output, 'a+')
+                o.write(entry.path)
+                o.write('\n')
+                o.close()
         return self.foundfiles
 
     def setoutput(self):
          print("Please enter the output location:")
          self.output = input()
 
+"""
     def findfiles(self, direct):
         output = open(self.output, 'a+')
         for entry in os.scandir(direct):
@@ -109,7 +114,7 @@ class FileFinder:
                 output.write(entry.path)
                 output.write('\n')
         output.close()
-
+"""
 
 def createScanner(regex, fileName, fileType):
     if fileType in ['.docx','.pptx','.zip']:
@@ -130,6 +135,7 @@ def main():
 
         # scan for files
         foundfiles = f.returnfiles(f.dir)
+        print(foundfiles)
 
         # each file in the output file will be a path to a text doc that needs to be scanned
         for line in foundfiles:
@@ -140,7 +146,6 @@ def main():
                 scan = createScanner(regexList, line, filetype)
                 scan.get_regex()
                 scan.find_matches()
-                print(scan.matches)
 
 
 if __name__ == "__main__":
