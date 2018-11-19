@@ -122,30 +122,43 @@ def createScanner(regex, fileName, fileType):
     else:
         return TextScanner(regex, fileName)
 
+def menu():
+    userEntry = 0
+    print("******* Welcome to PHI Scanner *******")
+    while (userEntry != 2):
+        print("Please make you selection from the following options:")
+        print("1. Scan for file which may contain PHI indicators")
+        print("2. Exit")
+        userEntry = int(input('$'))
+        if (userEntry == 1):
+            typelist = ['.txt', '.docx', '.pptx', '.zip']
+            regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
+
+            # create a file finder to find text docs
+            f = FileFinder('./sampleDir')
+
+            for filetype in typelist:
+
+                f.changeFiletype(filetype)
+
+                # scan for files
+                foundfiles = f.returnfiles(f.dir)
+                print(foundfiles)
+
+                # each file in the output file will be a path to a text doc that needs to be scanned
+                for line in foundfiles:
+                    # strip newline
+                    line = line.rstrip('\n')
+                    # scan for terms of each regex file
+                    for regexList in regexFiles:
+                        scan = createScanner(regexList, line, filetype)
+                        scan.get_regex()
+                        scan.find_matches()
+        print('******* ******* ******* *******')
+
+
 def main():
-    typelist = ['.txt','.docx','.pptx','.zip']
-    regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
-
-    # create a file finder to find text docs
-    f = FileFinder('./sampleDir')
-
-    for filetype in typelist:
-
-        f.changeFiletype(filetype)
-
-        # scan for files
-        foundfiles = f.returnfiles(f.dir)
-        print(foundfiles)
-
-        # each file in the output file will be a path to a text doc that needs to be scanned
-        for line in foundfiles:
-            # strip newline
-            line = line.rstrip('\n')
-            # scan for terms of each regex file
-            for regexList in regexFiles:
-                scan = createScanner(regexList, line, filetype)
-                scan.get_regex()
-                scan.find_matches()
+    menu()
 
 
 if __name__ == "__main__":
