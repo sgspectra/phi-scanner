@@ -122,38 +122,65 @@ def createScanner(regex, fileName, fileType):
     else:
         return TextScanner(regex, fileName)
 
+def runFullScan():
+    typelist = ['.txt', '.docx', '.pptx', '.zip']
+    regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
+
+    # create a file finder to find text docs
+    f = FileFinder('./sampleDir')
+
+    for filetype in typelist:
+
+        f.changeFiletype(filetype)
+
+        # scan for files
+        foundfiles = f.returnfiles(f.dir)
+        print(foundfiles)
+
+        # each file in the output file will be a path to a text doc that needs to be scanned
+        for line in foundfiles:
+            # strip newline
+            line = line.rstrip('\n')
+            # scan for terms of each regex file
+            for regexList in regexFiles:
+                scan = createScanner(regexList, line, filetype)
+                scan.get_regex()
+                scan.find_matches()
+
+def editPhiTerms():
+    option = 0
+    while(option != 3):
+        print("1. View PHI Regular Expression File")
+        print("2. Add to PHI Regular Expression File")
+        print("3. Return to main menu")
+        option = int(input('$'))
+        if(option == 1):
+            f = open('./lib/phi_regex.txt', 'r')
+            for line in f:
+                print(line.rstrip('\n'))
+            f.close()
+        elif(option == 2):
+            f = open('./lib/phi_regex.txt', 'a+')
+            newRegex = input("Please enter the regular expression to be added:")
+            f.write(newRegex)
+            f.write('\n')
+            f.close()
+
 def menu():
     userEntry = 0
     print("******* Welcome to PHI Scanner *******")
-    while (userEntry != 2):
+    while(userEntry != 4):
         print("Please make you selection from the following options:")
         print("1. Scan for file which may contain PHI indicators")
-        print("2. Exit")
+        print("2. Edit PHI Search Terms")
+        print("3. Edit Dictionary")
+        print("4. Exit")
+        #TODO make sure userEntry is valid
         userEntry = int(input('$'))
-        if (userEntry == 1):
-            typelist = ['.txt', '.docx', '.pptx', '.zip']
-            regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
-
-            # create a file finder to find text docs
-            f = FileFinder('./sampleDir')
-
-            for filetype in typelist:
-
-                f.changeFiletype(filetype)
-
-                # scan for files
-                foundfiles = f.returnfiles(f.dir)
-                print(foundfiles)
-
-                # each file in the output file will be a path to a text doc that needs to be scanned
-                for line in foundfiles:
-                    # strip newline
-                    line = line.rstrip('\n')
-                    # scan for terms of each regex file
-                    for regexList in regexFiles:
-                        scan = createScanner(regexList, line, filetype)
-                        scan.get_regex()
-                        scan.find_matches()
+        if(userEntry == 1):
+            runFullScan()
+        elif(userEntry == 2):
+            editPhiTerms()
         print('******* ******* ******* *******')
 
 
