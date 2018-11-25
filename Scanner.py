@@ -144,7 +144,8 @@ def runFullScan():
 
         # scan for files
         foundfiles = f.returnfiles(f.dir)
-        print(foundfiles)
+
+        #print(foundfiles)
 
         # each file in the output file will be a path to a text doc that needs to be scanned
         for line in foundfiles:
@@ -222,15 +223,30 @@ def editDictionary():
             f.write(newRegex)
             f.close()
 
+def generateReport(matches):
+    reportName = input('Please enter the output file for the report:').strip()
+    report = open(reportName, 'w+')
+    for key in matches:
+        report.write(key)
+        print(key)
+        report.write('\n')
+        report.write(str(matches[key]))
+        print(str(matches[key]))
+        report.write('\n')
+    report.close()
+    print('A copy of this report has been stored in: ' + reportName)
+
+
 def menu():
     userEntry = 0
     print("******* Welcome to PHI Scanner *******")
-    while(userEntry != 4):
+    while(userEntry != 5):
         print("Please make your selection from the following options:")
         print("1. Scan for files which may contain PHI indicators")
         print("2. Edit PHI Search Terms")
         print("3. Edit Dictionary")
-        print("4. Exit")
+        print("4. Generate Report")
+        print("5. Exit")
         #TODO make sure userEntry is valid
         userEntry = int(input('$'))
         if(userEntry == 1):
@@ -239,6 +255,8 @@ def menu():
             editPhiTerms()
         elif(userEntry == 3):
             editDictionary()
+        elif(userEntry == 4):
+            generateReport(runFullScan())
         print('******* ******* ******* *******')
 
 
