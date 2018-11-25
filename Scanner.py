@@ -65,19 +65,19 @@ class ZipScanner:
 
         inputZipFile = zipfile.ZipFile(self.scanFile)
         for name in inputZipFile.namelist():
-            if name.endswith(".xml"):
+            if name.endswith("document.xml"):
                 for exp in self.regex:
 
                     inFile =  str(inputZipFile.read(name))
                     matches = exp.findall(inFile)
 
                     #TODO Remove code for debugging false positives
-                    dump = open('./dump.txt', 'a+')
-                    dump.write(name)
-                    dump.write('\n')
-                    dump.write(str(matches))
-                    dump.write('\n')
-                    dump.close()
+                    # dump = open('./dump.txt', 'a+')
+                    # dump.write(name)
+                    # dump.write('\n')
+                    # dump.write(str(matches))
+                    # dump.write('\n')
+                    # dump.close()
 
                     for match in matches:
                         self.matches.append(match)
@@ -159,7 +159,15 @@ def runFullScan():
                     matches[line] += scan.matches
                 else:
                     matches[line] = scan.matches
-                #print(scan.matches)
+
+                #TODO Remove Debugging Code
+                dump = open('./dump.txt', 'w+')
+                for key in matches.keys():
+                    dump.write(key)
+                    dump.write('\n')
+                    dump.write(str(matches[key]))
+                    dump.write('\n')
+                dump.close()
     
     return matches
 
