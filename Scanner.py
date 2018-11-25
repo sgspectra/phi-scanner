@@ -145,7 +145,7 @@ def runFullScan():
         # scan for files
         foundfiles = f.returnfiles(f.dir)
 
-        #print(foundfiles)
+        print('Found ' + str(len(foundfiles)) + ' files of type ' + filetype)
 
         # each file in the output file will be a path to a text doc that needs to be scanned
         for line in foundfiles:
