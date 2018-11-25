@@ -71,6 +71,14 @@ class ZipScanner:
                     inFile =  str(inputZipFile.read(name))
                     matches = exp.findall(inFile)
 
+                    #TODO Remove code for debugging false positives
+                    dump = open('./dump.txt', 'a+')
+                    dump.write(name)
+                    dump.write('\n')
+                    dump.write(str(matches))
+                    dump.write('\n')
+                    dump.close()
+
                     for match in matches:
                         self.matches.append(match)
 
@@ -151,7 +159,7 @@ def runFullScan():
                     matches[line] += scan.matches
                 else:
                     matches[line] = scan.matches
-                print(scan.matches)
+                #print(scan.matches)
     
     return matches
 
@@ -210,8 +218,8 @@ def menu():
     userEntry = 0
     print("******* Welcome to PHI Scanner *******")
     while(userEntry != 4):
-        print("Please make you selection from the following options:")
-        print("1. Scan for file which may contain PHI indicators")
+        print("Please make your selection from the following options:")
+        print("1. Scan for files which may contain PHI indicators")
         print("2. Edit PHI Search Terms")
         print("3. Edit Dictionary")
         print("4. Exit")
