@@ -1,7 +1,10 @@
+#!/usr/bin/python3
+
 import re
 import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
+import pyAesCrypt
 
 class TextScanner:
 
@@ -237,16 +240,68 @@ def generateReport(matches):
     print('A copy of this report has been stored in: ' + reportName)
 
 
+def encryptFiles():
+    # buffersize
+    bufferSize = 64 * 1024
+
+    # encrypts the file with password and file name
+    def encrypt(password, fileName):
+        pyAesCrypt.encryptFile(fileName, fileName + ".aes", password, bufferSize)
+        if os.path.exists(fileName):
+            os.remove(fileName)
+
+    # decrypt file with password and file name
+    def decrypt(password, fileName):
+        pyAesCrypt.decryptFile(fileName + ".aes", fileName, password, bufferSize)
+        if os.path.exists(fileName + ".aes"):
+            os.remove(fileName + ".aes")
+
+    done = False
+    # runs until the user quits
+    while (not done):
+        print("Do you want to encrypt, decrypt, or quit? (E/D/Q)")
+        answer = input().lower().strip()
+        # if user wants to encrypt
+        if (answer == "e"):
+            print("Enter name of file to encrypt: ")
+            fileName = input().strip()
+            print("Enter password: ")
+            password = input().strip()
+            try:
+                encrypt(password, fileName)
+            except IOError:
+                print("ERROR file does not exist")
+        # if user wants to decrypt
+        elif (answer == "d"):
+            print("Enter name of file to decrypt: ")
+            fileName = input().strip()
+            print("Enter password: ")
+            password = input().strip()
+            try:
+                decrypt(password, fileName)
+            except IOError:
+                print("ERROR file is not encrypted")
+            except ValueError:
+                print("ERROR password is incorrect")
+        # if user wants to quit
+        elif (answer == "q"):
+            done = True
+            break
+        else:
+            print("Sorry that is not an option")
+
+
 def menu():
     userEntry = 0
     print("******* Welcome to PHI Scanner *******")
-    while(userEntry != 5):
+    while(userEntry != 6):
         print("Please make your selection from the following options:")
         print("1. Scan for files which may contain PHI indicators")
         print("2. Edit PHI Search Terms")
         print("3. Edit Dictionary")
         print("4. Generate Report")
-        print("5. Exit")
+        print("5. Encrypt/Decrypt Files")
+        print("6. Exit")
         #TODO make sure userEntry is valid
         userEntry = int(input('$'))
         if(userEntry == 1):
@@ -257,6 +312,12 @@ def menu():
             editDictionary()
         elif(userEntry == 4):
             generateReport(runFullScan())
+        elif(userEntry == 5):
+            encryptFiles()
+        elif(userEntry == 6):
+            break
+        else:
+            print('Please select a valid option')
         print('******* ******* ******* *******')
 
 
