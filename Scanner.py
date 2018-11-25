@@ -92,7 +92,7 @@ class FileFinder:
     def __init__(self, directory, extension = ".txt"):
         self.dir = directory
         self.ext = extension
-        self.output = "./default_output.txt"
+        self.output = "./lib/default_output.txt"
         self.foundfiles = []
 
     def changeFiletype(self, ext):
@@ -133,13 +133,13 @@ def createScanner(regex, fileName, fileType):
     else:
         return TextScanner(regex, fileName)
 
-def runFullScan():
+def runFullScan(path):
     typelist = ['.txt', '.docx', '.pptx', '.zip']
     regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
     matches = {}
 
     # create a file finder to find text docs
-    f = FileFinder('./sampleDir')
+    f = FileFinder(path)
 
     for filetype in typelist:
 
@@ -305,13 +305,15 @@ def menu():
         #TODO make sure userEntry is valid
         userEntry = int(input('$'))
         if(userEntry == 1):
-            runFullScan()
+            path = input('Please enter the path to the directory you wish to scan:').strip()
+            runFullScan(path)
         elif(userEntry == 2):
             editPhiTerms()
         elif(userEntry == 3):
             editDictionary()
         elif(userEntry == 4):
-            generateReport(runFullScan())
+            path = input('Please enter the path to the directory you wish to scan:').strip()
+            generateReport(runFullScan(path))
         elif(userEntry == 5):
             encryptFiles()
         elif(userEntry == 6):

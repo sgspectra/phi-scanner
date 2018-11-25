@@ -1,8 +1,8 @@
-./sampleDir/file1.txt
+sampleDir/file1.txt
 ['amoxil', 'amphetamine', 'cialis', 'coumadin', 'cozaar', 'crestor', 'delasone', 'dextroamphetamine', 'fluoxetine', 'fluticasone', 'gabapentin', 'glucophage', 'hydrocodone', 'ibuprofen', 'levothyroxine', 'levoxyl', '123-45-6789', '987-65-4321', '123456789', '1990', '2000']
-./sampleDir/subdir1/file4.txt
+sampleDir/subdir1/file4.txt
 ['amoxil', 'amphetamine', 'cialis', 'coumadin', 'cozaar', 'crestor', 'delasone', 'dextroamphetamine', 'fluoxetine', 'fluticasone', 'gabapentin', 'glucophage', 'hydrocodone', 'ibuprofen', 'levothyroxine', 'levoxyl', '123-45-6789', '987-65-4321', '123456789', '1990', '2000']
-./sampleDir/file1docx.docx
+sampleDir/file1docx.docx
 ['amoxil', 'amphetamine', 'cialis', 'coumadin', 'cozaar', 'crestor', 'delasone', 'dextroamphetamine', 'fluoxetine', 'fluticasone', 'gabapentin', 'glucophage', 'hydrocodone', 'ibuprofen', 'levothyroxine', 'levoxyl', '123-45-6789', '987-65-4321', '123456789', '1990', '2006', '2006', '2006', '2010', '2010', '2006', '2010', '2010', '2000']
-./sampleDir/docxnophi.docx
+sampleDir/docxnophi.docx
 ['2006', '2006', '2006', '2010', '2010', '2006', '2010', '2010']
