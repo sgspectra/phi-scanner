@@ -125,6 +125,7 @@ def createScanner(regex, fileName, fileType):
 def runFullScan():
     typelist = ['.txt', '.docx', '.pptx', '.zip']
     regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
+    matches = {}
 
     # create a file finder to find text docs
     f = FileFinder('./sampleDir')
@@ -146,13 +147,20 @@ def runFullScan():
                 scan = createScanner(regexList, line, filetype)
                 scan.get_regex()
                 scan.find_matches()
+                if line in matches.keys():
+                    matches[line] += scan.matches
+                else:
+                    matches[line] = scan.matches
+                print(scan.matches)
+    
+    return matches
 
 def editPhiTerms():
     option = 0
     while(option != 3):
         print("1. View PHI Regular Expression File")
         print("2. Add to PHI Regular Expression File")
-        print("3. Return to main menu")
+        print("3. Return to Main Menu")
         option = int(input('$'))
         if(option == 1):
             f = open('./lib/phi_regex.txt', 'r')
@@ -162,8 +170,40 @@ def editPhiTerms():
         elif(option == 2):
             f = open('./lib/phi_regex.txt', 'a+')
             newRegex = input("Please enter the regular expression to be added:")
-            f.write(newRegex)
             f.write('\n')
+            f.write(newRegex)
+            f.close()
+
+def editDictionary():
+    option = 0
+    while(option != 5):
+        print("1. View Dictionary of Drug Terms")
+        print("2. Edit Dictionary of Drug Terms")
+        print("3. View Dictionary of Medical Terms")
+        print("4. Edit Dictionary of Medical Terms")
+        print("5. Return to Main Menu")
+        option = int(input('$'))
+        if (option == 1):
+            f = open('./lib/drugs.txt', 'r')
+            for line in f:
+                print(line.rstrip('\n'))
+            f.close()
+        elif (option == 2):
+            f = open('./lib/drugs.txt', 'a+')
+            newRegex = input("Please enter the term to be added:")
+            f.write('\n')
+            f.write(newRegex)
+            f.close()
+        elif (option == 3):
+            f = open('./lib/medTerms.txt', 'r')
+            for line in f:
+                print(line.rstrip('\n'))
+            f.close()
+        elif (option == 4):
+            f = open('./lib/medTerms', 'a+')
+            newRegex = input("Please enter the term to be added:")
+            f.write('\n')
+            f.write(newRegex)
             f.close()
 
 def menu():
@@ -181,6 +221,8 @@ def menu():
             runFullScan()
         elif(userEntry == 2):
             editPhiTerms()
+        elif(userEntry == 3):
+            editDictionary()
         print('******* ******* ******* *******')
 
 
