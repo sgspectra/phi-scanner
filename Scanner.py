@@ -165,7 +165,7 @@ def runFullScan(path):
                     matches[line] = scan.matches
 
                 #TODO Remove Debugging Code
-                dump = open('./dump.txt', 'w+')
+                dump = open('./lib/dump.txt', 'w+')
                 for key in matches.keys():
                     dump.write(key)
                     dump.write('\n')
