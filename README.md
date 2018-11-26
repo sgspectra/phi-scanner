@@ -14,3 +14,6 @@ $pip install pyAesCrypt
 
 pandas
 $pip install pandas
+
+xldr
+$pip install xldr

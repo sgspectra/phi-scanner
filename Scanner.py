@@ -5,6 +5,7 @@ import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
 import pyAesCrypt
+import pandas
 
 
 class TextScanner:
@@ -106,14 +107,43 @@ class FileFinder:
          self.output = input()
 
 
+class ExcelConverter:
+
+    def __init__(self, excel_file, text_file):
+        self.excel_file = excel_file
+        self.text_file = text_file
+
+    def read_file(self):
+        sheets = pandas.read_excel(self.excel_file, sheet_name=None)
+
+        for sheet in sheets:
+            data_frame = sheets[sheet]
+            rows, columns = data_frame.shape
+
+            for x in range(0, columns):
+                data = data_frame.iloc[:, x].tolist()
+                data = " ".join(str(x) for x in data)
+                self.write_to_file(data)
+
+    def write_to_file(self, data):
+        with open(self.text_file, 'w+') as file:
+            file.write(data)
+
+        file.close()
+
+
 def createScanner(regex, fileName, fileType):
     if fileType in ['.docx','.pptx','.zip']:
         return ZipScanner(regex, fileName)
+    elif fileType == '.xlsx':
+        xls = ExcelConverter(fileName, fileName + '.txt')
+        xls.read_file()
+        return TextScanner(regex, xls.text_file)
     else:
         return TextScanner(regex, fileName)
 
 def runFullScan(path):
-    typelist = ['.txt', '.docx', '.pptx', '.zip', '.csv']
+    typelist = ['.txt', '.docx', '.pptx', '.zip', '.csv', '.xlsx']
     regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
     matches = {}
 
