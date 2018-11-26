@@ -6,3 +6,5 @@ sampleDir/file1docx.docx
 ['amoxil', 'amphetamine', 'cialis', 'coumadin', 'cozaar', 'crestor', 'delasone', 'dextroamphetamine', 'fluoxetine', 'fluticasone', 'gabapentin', 'glucophage', 'hydrocodone', 'ibuprofen', 'levothyroxine', 'levoxyl', '123-45-6789', '987-65-4321', '123456789', '1990', '2000']
 sampleDir/file2.csv
 ['adderall', 'prozac', '1988']
+sampleDir/subdir1/positivexlsx.xlsx
+['anxiety', 'adderall', '1971']
