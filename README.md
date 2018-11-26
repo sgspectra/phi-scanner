@@ -13,4 +13,4 @@ pyAesCrypt
 $pip install pyAesCrypt
 
 pandas
-#pip install pandas
+$pip install pandas
