@@ -1,7 +1,11 @@
+#!/usr/bin/python3
+
 import re
 import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
+import pyAesCrypt
+
 
 class TextScanner:
 
@@ -28,6 +32,7 @@ class TextScanner:
             with open(self.scanFile, 'r') as inFile:
 
                 for line in inFile:
+
                     matches = exp.findall(line)
 
                     for match in matches:
@@ -65,11 +70,19 @@ class ZipScanner:
 
         inputZipFile = zipfile.ZipFile(self.scanFile)
         for name in inputZipFile.namelist():
-            if name.endswith(".xml"):
+            if name.endswith("document.xml"):
                 for exp in self.regex:
 
                     inFile =  str(inputZipFile.read(name))
                     matches = exp.findall(inFile)
+
+                    #TODO Remove code for debugging false positives
+                    # dump = open('./dump.txt', 'a+')
+                    # dump.write(name)
+                    # dump.write('\n')
+                    # dump.write(str(matches))
+                    # dump.write('\n')
+                    # dump.close()
 
                     for match in matches:
                         self.matches.append(match)
@@ -81,7 +94,7 @@ class FileFinder:
     def __init__(self, directory, extension = ".txt"):
         self.dir = directory
         self.ext = extension
-        self.output = "./default_output.txt"
+        self.output = "./lib/default_output.txt"
         self.foundfiles = []
 
     def changeFiletype(self, ext):
@@ -122,13 +135,13 @@ def createScanner(regex, fileName, fileType):
     else:
         return TextScanner(regex, fileName)
 
-def runFullScan():
-    typelist = ['.txt', '.docx', '.pptx', '.zip']
+def runFullScan(path):
+    typelist = ['.txt', '.docx', '.pptx', '.zip', '.csv']
     regexFiles = ['./lib/medTerms.txt', './lib/drugs.txt', './lib/phi_regex.txt']
     matches = {}
 
     # create a file finder to find text docs
-    f = FileFinder('./sampleDir')
+    f = FileFinder(path)
 
     for filetype in typelist:
 
@@ -136,7 +149,8 @@ def runFullScan():
 
         # scan for files
         foundfiles = f.returnfiles(f.dir)
-        print(foundfiles)
+
+        print('Found ' + str(len(foundfiles)) + ' files of type ' + filetype)
 
         # each file in the output file will be a path to a text doc that needs to be scanned
         for line in foundfiles:
@@ -151,7 +165,15 @@ def runFullScan():
                     matches[line] += scan.matches
                 else:
                     matches[line] = scan.matches
-                print(scan.matches)
+
+                #TODO Remove Debugging Code
+                dump = open('./lib/dump.txt', 'w+')
+                for key in matches.keys():
+                    dump.write(key)
+                    dump.write('\n')
+                    dump.write(str(matches[key]))
+                    dump.write('\n')
+                dump.close()
     
     return matches
 
@@ -206,23 +228,100 @@ def editDictionary():
             f.write(newRegex)
             f.close()
 
+def generateReport(matches):
+    reportName = input('Please enter the output file for the report:').strip()
+    report = open(reportName, 'w+')
+    for key in matches:
+        report.write(key)
+        print(key)
+        report.write('\n')
+        report.write(str(matches[key]))
+        print(str(matches[key]))
+        report.write('\n')
+    report.close()
+    print('A copy of this report has been stored in: ' + reportName)
+
+
+def encryptFiles():
+    # buffersize
+    bufferSize = 64 * 1024
+
+    # encrypts the file with password and file name
+    def encrypt(password, fileName):
+        pyAesCrypt.encryptFile(fileName, fileName + ".aes", password, bufferSize)
+        if os.path.exists(fileName):
+            os.remove(fileName)
+
+    # decrypt file with password and file name
+    def decrypt(password, fileName):
+        pyAesCrypt.decryptFile(fileName + ".aes", fileName, password, bufferSize)
+        if os.path.exists(fileName + ".aes"):
+            os.remove(fileName + ".aes")
+
+    done = False
+    # runs until the user quits
+    while (not done):
+        print("Do you want to encrypt, decrypt, or quit? (E/D/Q)")
+        answer = input().lower().strip()
+        # if user wants to encrypt
+        if (answer == "e"):
+            print("Enter name of file to encrypt: ")
+            fileName = input().strip()
+            print("Enter password: ")
+            password = input().strip()
+            try:
+                encrypt(password, fileName)
+            except IOError:
+                print("ERROR file does not exist")
+        # if user wants to decrypt
+        elif (answer == "d"):
+            print("Enter name of file to decrypt: ")
+            fileName = input().strip()
+            print("Enter password: ")
+            password = input().strip()
+            try:
+                decrypt(password, fileName)
+            except IOError:
+                print("ERROR file is not encrypted")
+            except ValueError:
+                print("ERROR password is incorrect")
+        # if user wants to quit
+        elif (answer == "q"):
+            done = True
+            break
+        else:
+            print("Sorry that is not an option")
+
+
 def menu():
     userEntry = 0
     print("******* Welcome to PHI Scanner *******")
-    while(userEntry != 4):
-        print("Please make you selection from the following options:")
-        print("1. Scan for file which may contain PHI indicators")
+    while(userEntry != 6):
+        print("Please make your selection from the following options:")
+        print("1. Scan for files which may contain PHI indicators")
         print("2. Edit PHI Search Terms")
         print("3. Edit Dictionary")
-        print("4. Exit")
+        print("4. Generate Report")
+        print("5. Encrypt/Decrypt Files")
+        print("6. Exit")
         #TODO make sure userEntry is valid
         userEntry = int(input('$'))
         if(userEntry == 1):
-            runFullScan()
+            path = input('Please enter the path to the directory you wish to scan:').strip()
+            runFullScan(path)
         elif(userEntry == 2):
             editPhiTerms()
         elif(userEntry == 3):
             editDictionary()
+        elif(userEntry == 4):
+            path = input('Please enter the path to the directory you wish to scan:').strip()
+            generateReport(runFullScan(path))
+        elif(userEntry == 5):
+            encryptFiles()
+        elif(userEntry == 6):
+            break
+        else:
+            print('Please select a valid option')
         print('******* ******* ******* *******')
 
 

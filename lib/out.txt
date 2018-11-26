@@ -1,4 +1,0 @@
-./sampleDir/subdir1/file4.txt
-./sampleDir/file1.txt
-./sampleDir/subdir1/file4.txt
-./sampleDir/file1.txt
