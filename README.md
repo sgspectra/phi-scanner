@@ -17,3 +17,9 @@ $pip install pandas
 
 xldr
 $pip install xldr
+
+pyopenssl
+$pip install pyopenssl
+
+flask
+$pip install flask
