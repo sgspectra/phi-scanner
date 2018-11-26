@@ -5,31 +5,6 @@ import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
 import pyAesCrypt
-import csv
-
-
-# class CSVScanner:
-#     def __init__(self, regexFile, scanFile):
-#         self.regexFile = regexFile
-#         self.scanFile = scanFile
-#         self.regex = []
-#         self.matches = []
-#
-#     def get_regex(self):
-#         def get_regex(self):
-#             with open(self.regexFile, 'r') as inFile:
-#                 for line in inFile:
-#
-#                     line = line.rstrip('\n')
-#
-#                     if len(line) > 0:
-#                         regex = re.compile(line)
-#                         self.regex.append(regex)
-#             inFile.close()
-#
-#     def find_matches(self):
-#         for exp in self.regex:
-
 
 
 class TextScanner:
@@ -57,6 +32,7 @@ class TextScanner:
             with open(self.scanFile, 'r') as inFile:
 
                 for line in inFile:
+
                     matches = exp.findall(line)
 
                     for match in matches:
