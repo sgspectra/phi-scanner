@@ -191,3 +191,12 @@ sampleDir/docxnophi.docx
 sampleDir/file2.csv
 sampleDir/subdir1/positivexlsx.xlsx
 sampleDir/plant_data.xlsx
+sampleDir/file1.txt
+sampleDir/plant_data.xlsx.txt
+sampleDir/subdir1/positivexlsx.xlsx.txt
+sampleDir/subdir1/file4.txt
+sampleDir/file1docx.docx
+sampleDir/docxnophi.docx
+sampleDir/file2.csv
+sampleDir/subdir1/positivexlsx.xlsx
+sampleDir/plant_data.xlsx
