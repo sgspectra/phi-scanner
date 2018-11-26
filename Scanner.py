@@ -4,7 +4,7 @@ import re
 import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
-#import pyAesCrypt
+import pyAesCrypt
 
 
 class TextScanner:
