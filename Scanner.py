@@ -209,12 +209,13 @@ def generateReport(matches):
     reportName = input('Please enter the output file for the report:').strip()
     report = open(reportName, 'w+')
     for key in matches:
-        report.write(key)
-        print(key)
-        report.write('\n')
-        report.write(str(matches[key]))
-        print(str(matches[key]))
-        report.write('\n')
+        if len(str(matches[key])) > 2:
+            report.write(key)
+            print(key)
+            report.write('\n')
+            report.write(str(matches[key]))
+            print(str(matches[key]))
+            report.write('\n')
     report.close()
     print('A copy of this report has been stored in: ' + reportName)
 
