@@ -38,3 +38,13 @@ sampleDir/file1.txt
 sampleDir/subdir1/file4.txt
 sampleDir/file1docx.docx
 sampleDir/docxnophi.docx
+sampleDir/file1.txt
+sampleDir/subdir1/file4.txt
+sampleDir/file1docx.docx
+sampleDir/docxnophi.docx
+sampleDir/file2.csv
+sampleDir/file1.txt
+sampleDir/subdir1/file4.txt
+sampleDir/file1docx.docx
+sampleDir/docxnophi.docx
+sampleDir/file2.csv

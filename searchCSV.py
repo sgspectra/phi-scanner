@@ -9,7 +9,7 @@ import csv
 def searchCSV(term_list):
     count = 0
     weight = 0
-    file = open("test.csv", "r")
+    file = open("./sampleDir/file2.csv", "r")
     reader = csv.reader(file, delimiter=',')
     for row in reader:
         for column in row:
