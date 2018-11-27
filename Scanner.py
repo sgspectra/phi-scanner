@@ -4,6 +4,7 @@ import re
 import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
+import json
 #import pyAesCrypt
 
 
@@ -13,7 +14,8 @@ class TextScanner:
         self.regexFile = regexFile
         self.scanFile = scanFile
         self.regex = []
-        self.matches = []
+        self.matches = {}
+        
 
     def get_regex(self):
         with open(self.regexFile, 'r') as inFile:
@@ -23,16 +25,19 @@ class TextScanner:
 
                 if len(line) > 0:
                     regex = re.compile(line)
-                    self.regex.append(regex)
+                    self.regex.append([regex, line])
         inFile.close()
 
     def find_matches(self):
         for exp in self.regex:
             with open(self.scanFile, 'r') as inFile:
                 for line in inFile:
-                    matches = exp.findall(line)
-                    for match in matches:
-                        self.matches.append(match)
+                    matches = exp[0].findall(line)
+                    if len(matches) > 0:
+                        if not self.regexFile in self.matches.keys():
+                            self.matches[self.regexFile] = {}
+                        self.matches[self.regexFile][exp[1]] = matches
+
             inFile.close()
 
     def flag_file(self):
@@ -48,7 +53,8 @@ class ZipScanner:
         self.regexFile = regexFile
         self.scanFile = scanFile
         self.regex = []
-        self.matches = []
+        self.matches = {}
+        self.matches = {}
 
     def get_regex(self):
         with open(self.regexFile, 'r') as inFile:
@@ -58,7 +64,7 @@ class ZipScanner:
 
                 if len(line) > 0:
                     regex = re.compile(line)
-                    self.regex.append(regex)
+                    self.regex.append([regex, line])
         inFile.close()
 
     def find_matches(self):
@@ -72,9 +78,11 @@ class ZipScanner:
                 splitFile = re.split(re.compile("</?[A-Za-z]\:t[\S?.*?]?>"), inFile)
                 inFile = '\n'.join(splitFile[1::2])
                 for exp in self.regex:                    
-                    matches = exp.findall(inFile)
-                    for match in matches:
-                        self.matches.append(match)
+                    matches = exp[0].findall(inFile)
+                    if len(matches) > 0:
+                        if not self.regexFile in self.matches.keys():
+                            self.matches[self.regexFile] = {}
+                        self.matches[self.regexFile][exp[1]] = matches
 
 
 class FileFinder:
@@ -139,7 +147,15 @@ def runFullScan(path):
                 scan.get_regex()
                 scan.find_matches()
                 if line in matches.keys():
-                    matches[line] += scan.matches
+
+                    #combine the two dicts together
+                    
+                    #python 3.5 or greater
+                    #matches[line] = {**matches[line], **scan.matches}
+
+                    #python 3.4 or lower
+                    matches[line].update(scan.matches)
+
                 else:
                     matches[line] = scan.matches
 
@@ -206,17 +222,10 @@ def editDictionary():
             f.close()
 
 def generateReport(matches):
-    reportName = input('Please enter the output file for the report:').strip()
-    report = open(reportName, 'w+')
-    for key in matches:
-        report.write(key)
-        print(key)
-        report.write('\n')
-        report.write(str(matches[key]))
-        print(str(matches[key]))
-        report.write('\n')
-    report.close()
-    print('A copy of this report has been stored in: ' + reportName)
+    reportName = 'Reports/' + input('Please enter the output file for the report:').strip()
+    with open(reportName, 'w') as outfile:
+        json.dump(matches, outfile, indent=4)
+    print('A copy of this report has been stored in the Reports directory under: ' + reportName)
 
 
 def encryptFiles():
