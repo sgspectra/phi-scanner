@@ -4,13 +4,10 @@ import re
 import os
 import xml.etree.ElementTree as ElementTree
 import zipfile
-<<<<<<< HEAD
 import json
 #import pyAesCrypt
-=======
 import pyAesCrypt
 import pandas
->>>>>>> bec88fb359cd12bd831d63232fbe3bf3be30aeba
 
 
 class TextScanner:
@@ -256,25 +253,10 @@ def editDictionary():
             f.close()
 
 def generateReport(matches):
-<<<<<<< HEAD
     reportName = 'Reports/' + input('Please enter the output file for the report:').strip()
     with open(reportName, 'w') as outfile:
         json.dump(matches, outfile, indent=4)
     print('A copy of this report has been stored in the Reports directory under: ' + reportName)
-=======
-    reportName = input('Please enter the output file for the report:').strip()
-    report = open(reportName, 'w+')
-    for key in matches:
-        if len(str(matches[key])) > 2:
-            report.write(key)
-            print(key)
-            report.write('\n')
-            report.write(str(matches[key]))
-            print(str(matches[key]))
-            report.write('\n')
-    report.close()
-    print('A copy of this report has been stored in: ' + reportName)
->>>>>>> bec88fb359cd12bd831d63232fbe3bf3be30aeba
 
 
 def encryptFiles():
