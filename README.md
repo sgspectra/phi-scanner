@@ -7,3 +7,19 @@ can be used to identify a file a having patient health info
 
 lib/medTerms.txt is a file containing a list of medical terms that
 might indicate a file contains patient health info
+
+## Dependencies
+pyAesCrypt
+$pip install pyAesCrypt
+
+pandas
+$pip install pandas
+
+xldr
+$pip install xldr
+
+pyopenssl
+$pip install pyopenssl
+
+flask
+$pip install flask
